@@ -1,0 +1,41 @@
+﻿@model InviteEditModel
+@{
+    Layout = null;
+}
+
+<div class="modal fade" id="add_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form id="form" autocomplete="off" method="post">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="exampleModalLongTitle">增加邀请码</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="model">
+                    <div class="alert alert-danger" role="alert">
+                        每个邀请码可以重复使用，直到删除为止，因此创建大量的邀请码无意义。
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Code" class="control-label"></label>
+                        <div class="input-group">
+                            <input asp-for="Code" class="form-control" />
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-info" type="button" id="random">随机生成</button>
+                            </div>
+                        </div>
+
+                        <span asp-validation-for="Code" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关 闭</button>
+                    <button type="submit" class="btn btn-primary" id="btn_save">保 存</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+

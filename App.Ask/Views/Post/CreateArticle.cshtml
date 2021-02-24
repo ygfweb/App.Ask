@@ -1,0 +1,112 @@
+﻿@model PostEditModel
+@{
+    ViewData["Title"] = "发表文章";
+}
+
+@section css{
+    <link href="~/assets/tagsinput/bootstrap-tagsinput-typeahead.css" rel="stylesheet" />
+    <link href="~/assets/tagsinput/bootstrap-tagsinput.css" rel="stylesheet" />
+    <link href="~/assets/tagsinput/tagsinput-bs4.css" rel="stylesheet" />
+}
+
+<div class="container mt-2">
+    <div class="row">
+        <div class="col">
+            <nav class="mt-2">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">首页</a></li>
+                    <li class="breadcrumb-item active">发表文章</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form method="post" autocomplete="off" id="form">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="PostType" />
+                <div class="card">
+                    <div class="card-header bg-light-blue">发表文章</div>
+                    <div class="card-body">
+                        <div class="form-group form-row">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input type="text" asp-for="Title" class="form-control" placeholder="文章标题" />
+                                    <div class="invalid-feedback d-block">
+                                        <span asp-validation-for="Title"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <select asp-for="TopicId" asp-items="@Model.TopicSelectItems" class="form-control"></select>
+                                    <div class="invalid-feedback d-block">
+                                        <span asp-validation-for="TopicId"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="UseTags"></label>
+                            <div class="input-group">
+                                <select asp-for="UseTags" multiple="multiple" asp-items="@Model.UseTagSelectItems"></select>
+                                <small class="form-text text-muted">输入文字后按回车即可创建标签，最多只能创建5个标签</small>
+                                <div class="invalid-feedback d-block">
+                                    <span asp-validation-for="UseTags"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group bg-white">
+                            <textarea asp-for="Content" class="form-control" placeholder="文章内容"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card mt-2">
+                            <div class="card-footer">
+                                <button class="btn btn-primary" id="btn-publish" type="button">立即发布</button>
+                                @*<button class="btn btn-warning" id="btn-hide" type="button">保存为草稿</button>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section js{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/assets/tinymce/tinymce.min.js"></script>
+    <script src="~/assets/typeahead.js/typeahead.bundle.js"></script>
+    <script src="~/assets/tagsinput/bootstrap-tagsinput.js"></script>
+
+    <script>
+        $(function () {
+            DomHelper.setTagsinput("#UseTags", @Html.Raw(Model.BestTags));
+            DomHelper.setTinymce("#Content",300);
+            let formDom = document.getElementById("form");
+            $("#btn-publish").click(function () {
+                $("#btn-publish").attr("disabled", "true");
+                $("#btn-publish").html(`<span class="spinner-border spinner-border-sm" role="status"></span> 正在提交...`);
+                tinyMCE.triggerSave();
+                AjaxHelper.postForm('@Url.Action("CreateArticle")', formDom).done(function (result) {
+                    console.log(result);
+                    if (result.Success) {
+                        DialogHelper.showSuccess(result.Message, function () {
+                            window.location.href = result.Context;
+                        })
+                    } else {
+                        AjaxHelper.showFormError(formDom, result);
+                    }
+                    return false;
+                }).always(function () {
+                    $("#btn-publish").removeAttr("disabled");
+                    $("#btn-publish").text("发 布");
+                });
+            })
+        });
+    </script>
+}

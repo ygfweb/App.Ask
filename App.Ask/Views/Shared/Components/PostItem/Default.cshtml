@@ -1,0 +1,60 @@
+﻿@model PostItemViewModel
+
+
+<div class="media">
+    <a  asp-controller="User" asp-action="Page" asp-route-id="@Model.PostView.PersonId">
+        <img src="@Model.PostView.PersonAvatar" width="48" height="48" class="mr-2 rounded-circle" alt="头像" />
+    </a>    
+    <div class="media-body d-flex flex-column">
+        <div>
+            <a asp-controller="Topic" asp-action="Details" asp-route-id="@Model.PostView.TopicId" class="activity-category">@Model.PostView.TopicName</a>
+            @if (Model.PostView.IsTop)
+            {
+                <a href="#" class="activity-top">置顶</a>
+            }
+            @if (Model.PostView.IsBest)
+            {
+                <a href="#" class="activity-best">推荐</a>
+            }
+            @if (Model.PostView.PostType == App.Ask.Library.Enums.PostType.Article)
+            {
+                <a asp-controller="Article" asp-action="Details" asp-route-id="@Model.PostView.Id" class="activity-title word_bread">
+                    @Model.PostView.Title
+                </a>
+            }
+            else
+            {
+                <a asp-controller="Question" asp-action="Details" asp-route-id="@Model.PostView.Id" class="activity-title word_bread">
+                    @Model.PostView.Title
+                </a>
+            }
+        </div>
+        <div>
+            <div class="mr-2 d-inline-block">
+                <a asp-controller="User" asp-action="Page" asp-route-id="@Model.PostView.PersonId" class="mr-1">@Model.PostView.PersonNickName</a>
+                @if (Model.PostView.PostType == App.Ask.Library.Enums.PostType.Article)
+                {
+                    <span class="text-muted">发表了文章</span>
+                }
+                else
+                {
+                    <span class="text-muted">提出了问题</span>
+                }
+            </div>
+            <span class="text-muted mr-2">@Model.GetPublishTime()</span>
+            <i class="fa fa-eye text-muted" aria-hidden="true"></i>
+            <span class="text-muted mr-2">@Model.PostView.ViewNum</span>
+            <i class="fa fa-commenting-o text-muted"></i>
+            <span class="text-muted mr-2">@Model.PostView.CommentNum</span>
+            <i class="fa fa-tags mr-1 text-muted" aria-hidden="true"></i>
+            <div class="d-inline-block">
+                @foreach (var item in Model.Tags)
+                {
+                    <a asp-controller="Tag" asp-action="Details" asp-route-id="@item.Id" class="badge badge-light text-muted">@item.Name</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+

@@ -1,0 +1,38 @@
+﻿.black-wrapper {
+    background: #2c2c2c;
+    color: #cacaca;
+    padding-top: 30px;
+    padding-bottom: 50px;
+
+    a {
+        color: #cacaca;
+    }
+}
+.footer-title {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+footer {
+    .post-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            padding-top: 10px;
+            /*border-top: 1px solid #434343;*/
+            &:first-child {
+                border-top: none;
+                margin: 0;
+                padding: 0;
+            }
+        }
+    }
+}
+
+.copyright {
+    background-color: #292929;
+}

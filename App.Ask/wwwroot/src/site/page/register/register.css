@@ -1,0 +1,28 @@
+﻿body {
+  background: #4576C2; }
+
+#Code {
+  width: calc(100% - 120px); }
+
+#send_email {
+  width: 150px; }
+
+.code_input {
+  width: calc(100% - 120px); }
+
+.code_image {
+  width: 120px;
+  height: 38px;
+  cursor: pointer; }
+
+.spinner-wrapper {
+  display: block;
+  position: fixed;
+  z-index: 1031;
+  top: 30%;
+  right: 50%;
+  /* or: left: 50%; */
+  margin-top: -20px;
+  /* have of the elements height */
+  margin-right: -20px;
+  /* have of the elements widht */ }

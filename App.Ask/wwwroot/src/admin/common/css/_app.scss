@@ -1,0 +1,15 @@
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+  "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei",
+  sans-serif;
+  background-color: #f2f3f8;
+  overflow: hidden;
+}
+
+html,body,#app {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  // 去掉网页下方大段空白
+  overflow-y: hidden;
+}

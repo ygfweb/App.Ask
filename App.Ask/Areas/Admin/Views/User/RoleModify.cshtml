@@ -1,0 +1,80 @@
+﻿@model UserRoleModifyModel
+@using SiHan.Libs.Utils.Reflection
+@using App.Ask.Library.Enums
+@{
+    Layout = null;
+}
+
+
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form id="form" autocomplete="off" method="post">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="exampleModalLongTitle">修改角色</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="model">
+                    <input type="hidden" asp-for="Id" />
+                    @if (Model.LoginUser.RoleType == App.Ask.Library.Enums.RoleType.SuperAdmin)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="Radios1" asp-for="Role" value="@(RoleType.Admin)">
+                            <label class="form-check-label" for="Radios1">管理员</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="Radios2" asp-for="Role" value="@RoleType.Master">
+                            <label class="form-check-label" name="role" for="Radios2">后台运营</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="Radios3" asp-for="Role" value="@RoleType.User">
+                            <label class="form-check-label" name="role" for="Radios3">普通会员</label>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="Radios2" asp-for="Role" value="@RoleType.Master">
+                            <label class="form-check-label" name="role" for="Radios2">后台运营</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="Radios3" asp-for="Role" value="@RoleType.User">
+                            <label class="form-check-label" name="role" for="Radios3">普通会员</label>
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关 闭</button>
+                    <button type="submit" class="btn btn-primary" id="btn_save">保 存</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    $("#modal").modal("show");
+    $(function () {
+        let form = document.getElementById("form");
+        $(form).on("submit", function () {
+            let formData = new FormData(form);
+            $("#btn_save").attr("disabled", "disabled");
+            AjaxHelper.postFormData("@Url.Action("RoleModify")", formData).done(function (result) {
+                if (result.Success) {
+                    $("#modal").modal("hide");
+                    DialogHelper.showMessageDialog("操作成功");
+                } else {
+                    DialogHelper.showErrorDialog(result.Message);
+                }
+            }).fail(function () {
+                DialogHelper.showErrorDialog("该操作失败");
+            }).always(function () {
+                $("#btn_save").removeAttr("disabled");
+            })
+            return false;
+        })
+    })
+</script>

@@ -1,0 +1,26 @@
+﻿@model ArticleItemComponentModel
+
+    <div class="media mt-3">
+        <div class="media-body">
+            @if (Model.PostView.PostType == App.Ask.Library.Enums.PostType.Article)
+            {
+                <h5 class="my-2"><a asp-controller="Article" asp-action="Details" asp-route-id="@Model.PostView.Id" class="activity-title word_bread">@Model.PostView.Title</a></h5>
+            }
+            else
+            {
+                <h5 class="my-2"><a asp-controller="Question" asp-action="Details" asp-route-id="@Model.PostView.Id" class="activity-title word_bread">@Model.PostView.Title</a></h5>
+            }
+            <div class="text-secondary word_bread">
+                @Model.getText()
+            </div>
+            <div class="mt-2">
+                <a asp-controller="User" asp-action="Page" asp-route-id="@Model.PostView.PersonId"><img src="@Model.PostView.PersonAvatar" class="mr-2 rounded-circle" height="20" width="20" /><span>@Model.PostView.PersonNickName</span></a>
+                <small class="text-muted mr-2">@Model.GetTime()</small>
+                <small class="text-muted mr-2">阅读 (@Model.PostView.ViewNum)</small>
+                <small class="text-muted mr-2">点赞 (@Model.PostView.LikeNum)</small>
+                <small class="text-muted mr-2">评论 (@Model.PostView.CommentNum)</small>
+                <small class="text-muted mr-2">收藏 (@Model.PostView.CollectNum)</small>
+            </div>
+        </div>
+    </div>
+<hr />

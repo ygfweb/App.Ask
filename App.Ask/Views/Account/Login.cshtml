@@ -1,0 +1,113 @@
+﻿@model AccountLoginModel
+@{
+    Layout = "_BaseLayout";
+    ViewData["Title"] = "登录";
+}
+@section css{
+    <link href="~/src/site/page/login/login.css" rel="stylesheet" asp-append-version="true" />
+}
+<div class="container">
+    <div class="row mt-3">
+        <div class="offset-md-3 col-md-6">
+            <form id="login_form" autocomplete="off" method="post">
+                <div class="border shadow rounded bg-white">
+                    <div class="p-3 border-bottom bg-light">
+                        <div class="d-flex justify-content-center">
+                            <span>@Model.SiteName 登录</span>
+                        </div>
+                    </div>
+                    <div class="px-4 py-3">
+                        @if (!string.IsNullOrWhiteSpace(Model.AlertMsg))
+                        {
+                            <div class="alert alert-warning">
+                                @Model.AlertMsg
+                            </div>
+                        }
+                        <div class="form-group form-row">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-user"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="用户名" asp-for="UserName" autofocus="autofocus">
+                                <div class="invalid-feedback d-block">
+                                    <span asp-validation-for="UserName"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-row">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                </div>
+                                <input type="password" class="form-control" placeholder="登录密码" asp-for="Password" />
+                                <div class="invalid-feedback d-block">
+                                    <span asp-validation-for="Password"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-row">
+                            <div class="input-group code_input">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-etsy"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="验证码" asp-for="Code">
+                                <div class="invalid-feedback d-block">
+                                    <span asp-validation-for="Code"></span>
+                                </div>
+                            </div>
+                            <img class="code_image" src="/CodeImage" alt="验证码" id="code_image" title="点击图片刷新验证码">
+                        </div>
+
+                        <div class="form-group form-row  noselect justify-content-between">
+                            <div class="form-group form-check">
+                                <input asp-for="@Model.IsRememberMe" class="form-check-input">
+                                <label class="form-check-label" asp-for="@Model.IsRememberMe"></label>
+                            </div>
+                        </div>
+
+                        <button class="btn-block btn btn-primary" type="submit" id="btn_login">
+                            <i class="fa fa fa-arrow-circle-right mr-2"></i>登 录
+                        </button>
+
+                        <div class="d-flex justify-content-between">
+                            <p><a href="/">返回首页</a></p>
+                            <p><span>没有账号，请</span><a asp-action="Register">注册</a></p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+@section js{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(function () {
+            $("#code_image").on("click", function () {
+                $("#code_image").attr("src", "/CodeImage?r=" + Math.random());
+            });
+            let formDom = document.getElementById("login_form");
+            $(formDom).data("validator").settings.submitHandler = function () {
+                AjaxHelper.postForm('@Url.Action("Login")', formDom).done(function (data) {
+                    if (data.Success) {
+                         window.location.href = "@Model.ReturnUrl";
+                    } else {
+                        $("#code_image").attr("src", "/CodeImage?r=" + Math.random());
+                        $("#Code").val("");
+                        AjaxHelper.showFormError(formDom, data);
+                    }
+                });
+                return false;
+            };
+        })
+    </script>
+}

@@ -1,0 +1,13 @@
+﻿.hero {
+    background-size: cover;
+    background-image: url("../images/overlay.svg"), linear-gradient(180deg, #3e3ed0, #1e9fc4 57%, #4fddd5);
+    overflow: hidden;
+    .jumbotron {
+        background-color: transparent;
+        color: #ffffff;
+    }
+
+    .hero_image {
+        height: 400px;
+    }
+}

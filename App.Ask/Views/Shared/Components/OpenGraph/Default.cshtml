@@ -1,0 +1,16 @@
+﻿@model OpenGraphComponentModel
+<meta property="og:type" content="website" />
+@if (Model.IsHome)
+{
+    <meta property="og:title" content="@Model.SiteName" />
+}
+else
+{
+    <meta property="og:title" content="@ViewData["Title"] | @Model.SiteName" />
+}
+<meta property="og:url" content="@Model.Url" />
+<meta property="og:site_name" content="@Model.SiteName" />
+@if (Model.IsHome)
+{
+    <meta property="og:description" content="@Model.HomeDescription" />
+}

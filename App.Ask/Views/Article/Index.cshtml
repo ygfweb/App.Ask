@@ -1,0 +1,39 @@
+﻿@model ArticleIndexModel
+@{
+    ViewData["Title"] = "文章";
+}
+
+@section head{
+    <vc:banner p-title="文章"></vc:banner>
+}
+
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-lg-9">
+            <vc:topic-navbar></vc:topic-navbar>
+            <div class="bg-white p-3 shadow-sm">
+                <vc:filter-navbar></vc:filter-navbar>
+                <vc:article-list for-post-views="@Model.PostViews.Data"></vc:article-list>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="d-flex flex-row-reverse mt-2">
+                        <vc:bootstrap-pager for-page-size="@Model.PostViews.PageSize" for-row-count="@Model.PostViews.RowCount"></vc:bootstrap-pager>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="sticky-sidebar">
+                <div class="card mb-2 border-0 shadow-sm">
+                    <div class="card-body">
+                        <a asp-controller="Post" asp-action="CreateArticle" class="btn btn-block btn-danger">分享经验</a>
+                    </div>
+                </div>
+                <vc:new-best-article></vc:new-best-article>
+                <vc:best-tag></vc:best-tag>
+            </div>
+
+        </div>
+    </div>
+</div>

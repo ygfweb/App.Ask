@@ -1,0 +1,9 @@
+
+.form-control:focus {
+  border-color: #0074d9;
+  outline: none;
+  box-shadow: none;
+}
+.pop-container{
+  z-index: $zindex-popover;
+}

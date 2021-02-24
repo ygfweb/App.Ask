@@ -1,0 +1,76 @@
+﻿@model ActivityItemComponentModel
+
+
+<div class="media">
+    <a asp-controller="User" asp-action="Page" asp-route-id="@Model.ActivityView.PersonId">
+        <img src="@Model.ActivityView.PersonAvatar" width="48" height="48" class="mr-2 rounded-circle" alt="头像" />
+    </a>
+    <div class="media-body d-flex flex-column">
+        <div>
+            <a asp-controller="Topic" asp-action="Details" asp-route-id="@Model.ActivityView.TopicId" class="activity-category">@Model.ActivityView.TopicName</a>
+            @if (Model.ActivityView.PostType == App.Ask.Library.Enums.PostType.Article)
+            {
+                <a asp-controller="Article" asp-action="Details" asp-route-id="@Model.ActivityView.PostId" class="activity-title word_bread">
+                    @Model.ActivityView.PostTitle
+                </a>
+            }
+            else
+            {
+                <a asp-controller="Question" asp-action="Details" asp-route-id="@Model.ActivityView.PostId" class="activity-title word_bread">
+                    @Model.ActivityView.PostTitle
+                </a>
+            }
+        </div>
+        <div>
+            <div class="mr-2 d-inline-block">
+                <a asp-controller="User" asp-action="Page" asp-route-id="@Model.ActivityView.PersonId" class="mr-1">@Model.ActivityView.PersonNickName</a>
+                @switch (Model.ActivityView.ActivityType)
+                {
+                    case App.Ask.Library.Enums.ActivityType.Publish:
+                        if (Model.ActivityView.PostType == App.Ask.Library.Enums.PostType.Article)
+                        {
+                            <span class="text-muted">发表了文章</span>
+                        }
+                        else if (Model.ActivityView.PostType == App.Ask.Library.Enums.PostType.Question)
+                        {
+                            <span class="text-muted">提出了问题</span>
+                        }
+                        break;
+                    case App.Ask.Library.Enums.ActivityType.Modify:
+                        if (Model.ActivityView.PostType == App.Ask.Library.Enums.PostType.Article)
+                        {
+                            <span class="text-muted">修改了文章</span>
+                        }
+                        else if (Model.ActivityView.PostType == App.Ask.Library.Enums.PostType.Question)
+                        {
+                            <span class="text-muted">修改了问题</span>
+                        }
+                        break;
+                    case App.Ask.Library.Enums.ActivityType.Comment:
+                        if (Model.ActivityView.PostType == App.Ask.Library.Enums.PostType.Article)
+                        {
+                            <span class="text-muted">评论了文章</span>
+                        }
+                        else if (Model.ActivityView.PostType == App.Ask.Library.Enums.PostType.Question)
+                        {
+                            <span class="text-muted">回答了问题</span>
+                        }
+                        break;
+                    case App.Ask.Library.Enums.ActivityType.Favorite:
+                        if (Model.ActivityView.PostType == App.Ask.Library.Enums.PostType.Article)
+                        {
+                            <span class="text-muted">收藏了文章</span>
+                        }
+                        else if (Model.ActivityView.PostType == App.Ask.Library.Enums.PostType.Question)
+                        {
+                            <span class="text-muted">关注了问题</span>
+                        }
+                        break;
+                }
+            </div>
+            <span class="text-muted mr-2">@Model.GetPublishTime()</span>
+        </div>
+    </div>
+</div>
+<hr />
+

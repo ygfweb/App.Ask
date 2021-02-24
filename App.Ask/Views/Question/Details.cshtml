@@ -1,0 +1,45 @@
+﻿@model ArticleDetailsModel
+@{
+    ViewData["Title"] = Model.Post.Title;
+}
+
+
+<div class="container">
+    <div class="row mt-2">
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col bg-white">
+                    <nav>
+                        <ol class="bg-white m-0 breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">首 页</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                <a asp-controller="Question" asp-action="Index">问答</a>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col bg-white">
+                    <vc:article-content p-post="Model.Post"></vc:article-content>
+                    <vc:comment-list p-post-id="@Model.Post.Id"></vc:comment-list>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3  d-none d-lg-block">
+            <div class="sticky-sidebar">
+                <vc:user-info for-person-view="Model.Person"></vc:user-info>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section js{
+    <script src="~/assets/tinymce/tinymce.min.js"></script>
+    <script>
+        $(function () {
+            DomHelper.setTinymce("#comments", 200);
+        });
+    </script>
+}

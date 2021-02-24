@@ -1,0 +1,27 @@
+﻿@model NewBestQuestionComponentModel
+
+@if (Model.Posts != null && Model.Posts.Count > 0)
+{
+    <div class="card mb-2 border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+            最新推荐
+        </div>
+        <ul class="list-group">
+            @foreach (var item in Model.Posts)
+            {
+                if (item.PostType == App.Ask.Library.Enums.PostType.Article)
+                {
+                    <li class="list-group-item border-0">
+                        <a asp-controller="Article" asp-action="Details" asp-route-id="@item.Id" class="text-secondary">@item.Title</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="list-group-item border-0">
+                        <a asp-controller="Question" asp-action="Details" asp-route-id="@item.Id" class="text-secondary">@item.Title</a>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+}

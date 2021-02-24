@@ -1,0 +1,39 @@
+﻿<!--顶部导航栏-->
+<div class="app-navbar navbar fixed-top navbar-expand navbar-dark">
+    <!--logo-->
+    <div class="navbar-brand app-navbar-brand">
+        后台管理
+    </div>
+    <!--折叠按钮-->
+    <div class="navbar-toggler hand-pointer">
+        <span class="navbar-toggler-icon"></span>
+    </div>
+    <!--右侧菜单-->
+    <div class="collapse navbar-collapse">
+        <div class="navbar-nav ml-auto">
+            <div class="nav-item hand-pointer">
+                <a class="nav-link indent-right" href="/">
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                    <span>返回首页</span>
+                </a>
+            </div>
+            <div class="nav-item hand-pointer">
+                <a href="#" class="nav-link indent-right" id="signout">
+                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                    <span>退 出</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $("#signout").click(function () {
+            DialogHelper.showConfirmDialog("将退出登录，确认吗？", function () {
+                window.location.href = "/account/logout";
+            });
+            return false;
+        });
+    });
+</script>

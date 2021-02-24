@@ -1,0 +1,5 @@
+﻿@model PostListViewModel
+@foreach (var item in Model.PostViews)
+{
+   @await Component.InvokeAsync("PostItem",item)
+}

@@ -1,0 +1,22 @@
+﻿@{
+    Layout = "_BaseLayout";
+}
+
+@section css{
+    @RenderSection("css", required: false)
+}
+<vc:top-navbar></vc:top-navbar>
+<div class="page-container">
+    @RenderSection("head", required: false)
+    <div class="site-content">
+        @RenderBody()
+    </div>
+    <vc:copyright></vc:copyright>
+</div>
+
+<vc:bottom-navbar></vc:bottom-navbar>
+<vc:to-top></vc:to-top>
+
+@section js{
+    @RenderSection("js", required: false)
+}

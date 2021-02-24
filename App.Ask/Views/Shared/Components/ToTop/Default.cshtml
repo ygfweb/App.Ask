@@ -1,0 +1,21 @@
+﻿<a id="back-to-top" href="#" class="btn btn-primary btn-lg back-to-top py-1 px-2" role="button">
+    <i class="fa fa-arrow-circle-up fa-lg" aria-hidden="true"></i>
+</a>
+
+<script>
+    $(document).ready(function () {
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 50) {
+                $('#back-to-top').fadeIn();
+            } else {
+                $('#back-to-top').fadeOut();
+            }
+        });
+        $('#back-to-top').click(function () {
+            $('body,html').animate({
+                scrollTop: 0
+            }, 400);
+            return false;
+        });
+    });
+</script>

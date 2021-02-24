@@ -1,0 +1,198 @@
+﻿@{
+    ViewData["Title"] = "用户管理";
+}
+
+<div class="bg-white d-flex align-items-center justify-content-between">
+    <h5 class="mb-0 ml-2">用户管理</h5>
+    <ol class="breadcrumb mb-0 bg-white align-self-end">
+        <li class="breadcrumb-item">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index">首页</a>
+        </li>
+    </ol>
+</div>
+
+
+<div class="container-fluid" id="vue-app">
+    <div class="row">
+        <div class="col">
+            <div class="card mt-2">
+                <div class="card-body">
+                    <form autocomplete="off" class="form-inline" id="form-search" v-on:submit.prevent="onSearch">
+                        <div class="input-group mr-3">
+                            <input type="text" name="search" id="search" class="form-control" value="" placeholder="输入用户的账号或昵称" />
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-info" type="button" title="搜索" id="btn-search" v-bind:disabled="isSearch == true">
+                                    <span v-if="isSearch" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    <i v-else class="fa fa-search" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive mt-2">
+                <table class="table table-hover table-bordered bg-white table-nowrap">
+                    <thead>
+                        <tr class="table-warning">
+                            <th scope="col">登录账号</th>
+                            <th scope="col">昵称</th>
+                            <th scope="col">注册时间</th>
+                            <th scope="col">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        <tr v-if="isLoaded == false">
+                            <td colspan="4">
+                                <div class="p-2 text-md-center">正在加载数据...</div>
+                            </td>
+                        </tr>
+                        <tr v-if="isLoaded == true && items.length == 0">
+                            <td colspan="4">
+                                <div class="p-2 text-md-center">暂无数据</div>
+                            </td>
+                        </tr>
+                        <tr v-for="item in sortData">
+                            <td v-text="item.Id"></td>
+                            <td v-text="item.Name"></td>
+                            <td v-if="item.IsHide">
+                                <button class="btn btn-outline-warning btn-sm" v-on:click="changeStatus(item)">
+                                    <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                            <td v-else>
+                                <button class="btn btn-outline-success  btn-sm" v-on:click="changeStatus(item)">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                            <td v-text="item.OrderNum"></td>
+                            <td>
+                                <button class="btn btn-danger btn-sm mr-2" v-on:click="removeItem(item)">删 除</button>
+                                <button class="btn btn-warning btn-sm mr-2" v-on:click="modifyItem(item)">修 改</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+      $(function () {
+             let data = {
+                isLoaded: false,
+                items:[]
+            };
+            let vm = new Vue({
+                el: "#vue-app",
+                data: data,
+                methods: {
+                    removeItem: function (item) {
+                        DialogHelper.showConfirmDialog(`确认删除'${item.Name}'吗？`, function () {
+                            AjaxHelper.postJson("@Url.Action("Delete")", item).done(function (postResult) {
+                                if (postResult.Success) {
+                                    data.items.splice(data.items.indexOf(item), 1);
+                                    DialogHelper.showToastSuccess("删除成功");
+                                } else {
+                                    DialogHelper.showErrorDialog(postResult.Message);
+                                }
+                            })
+                        })
+                    },
+                    modifyItem: function (item) {
+                        let id = item.Id;
+                        $.get("@Url.Action("Edit")/" + id).done(function (html) {
+                            placeholder.html(html);
+                            $("#modify_modal").modal("show");
+                            $('#modify_modal').on('shown.bs.modal', function () {
+                                $('#Name').focus();
+                                $("#Name").select();
+                            });
+                            let formDom = document.getElementById("form");
+                            $.validator.unobtrusive.parse(formDom);
+                            // 处理表单提交
+                            $(formDom).data("validator").settings.submitHandler = function () {
+                                AjaxHelper.postForm('@Url.Action("Edit")', formDom).done(function (result) {
+                                    if (result.Success) {
+                                        item.Name = result.Context.Name;
+                                        item.IsHide = result.Context.IsHide;
+                                        item.OrderNum = result.Context.OrderNum;
+                                        $("#modify_modal").modal("hide");
+                                        DialogHelper.showToastSuccess("操作成功");
+                                    } else {
+                                        AjaxHelper.showFormError(formDom, result);
+                                    }
+                                    return false;
+                                });
+                                return false;
+                            };
+                        })
+                    },
+                    changeStatus: function (item) {
+                        let msg = "";
+                        if (item.IsHide) {
+                            msg = `是否确认显示《${item.Name}》？`;
+                        } else {
+                            msg = `是否确认隐藏《${item.Name}》？`;
+                        }
+                        DialogHelper.showConfirmDialog(msg, function () {
+                            let url = "@Url.Action("ChangeStatus")";
+                            AjaxHelper.postJson(url, item).done(function (result) {
+                                if (result.Success) {
+                                    item.IsHide = !item.IsHide;
+                                    DialogHelper.showToastSuccess("操作成功");
+                                } else {
+                                    DialogHelper.showErrorDialog(result.Message);
+                                }
+                            });
+                        })
+                    }
+                },
+                computed: {
+                    sortData: function () {
+                        return data.items.sort(sortObject);
+                    }
+                }
+            });
+            // 加载数据
+            $.post("@Url.Action("GetAll")").done(function (result) {
+                if (result.Success) {
+                    data.isLoaded = true;
+                    data.items = result.Context;
+                } else {
+                    DialogHelper.showErrorDialog(result.Message);
+                }
+            });
+            // 弹出新增对话框
+            let placeholder = $("#placeholder");
+            $("#btn-add").click(function () {
+                $.get("@Url.Action("Create")").done(function (html) {
+                        placeholder.html(html);
+                        $("#add_modal").modal("show");
+                        $('#add_modal').on('shown.bs.modal', function () {
+                            $('#Name').focus();
+                        })
+                        let formDom = document.getElementById("form");
+                        $.validator.unobtrusive.parse(formDom);
+                        // 处理表单提交
+                        $(formDom).data("validator").settings.submitHandler = function () {
+                            AjaxHelper.postForm('@Url.Action("Create")', formDom).done(function (result) {
+                                if (result.Success) {
+                                    data.items.push(result.Context);
+                                    $("#add_modal").modal("hide");
+                                    DialogHelper.showToastSuccess("操作成功");
+                                } else {
+                                    AjaxHelper.showFormError(formDom, result);
+                                }
+                                return false;
+                            });
+                            return false;
+                        };
+                })
+            });
+        })
+</script>

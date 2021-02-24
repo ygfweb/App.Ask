@@ -1,0 +1,29 @@
+﻿@model HomeIndexModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "首页";
+}
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-lg-9">
+            <vc:topic-navbar></vc:topic-navbar>
+            <div class="bg-white p-2  shadow-sm">
+                <vc:filter-navbar></vc:filter-navbar>
+                <vc:post-list p-post-views="@Model.PostViews.Data"></vc:post-list>
+                <vc:bootstrap-pager for-page-size="@Model.PostViews.PageSize" for-row-count="@Model.PostViews.RowCount"></vc:bootstrap-pager>
+            </div>
+        </div>
+        <!--侧边栏-->
+        <div class="col-lg-3">
+            <div class="card mb-2 border-0 shadow-sm">
+                <div class="card-body">
+                    <a asp-controller="Post" asp-action="CreateAsk" class="btn btn-block btn-danger">我要提问</a>
+                    <a asp-controller="Post" asp-action="CreateArticle" class="btn btn-block btn-warning">分享经验</a>
+                </div>
+            </div>
+            <vc:new-announce></vc:new-announce>
+            <vc:new-best-post></vc:new-best-post>
+            <vc:best-tag></vc:best-tag>
+        </div>
+    </div>
+</div>

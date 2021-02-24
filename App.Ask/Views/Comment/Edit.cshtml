@@ -1,0 +1,85 @@
+﻿@model App.Ask.Models.CommentEditModel
+
+@{
+    ViewData["Title"] = "修改评论";
+}
+
+@{
+    string returnUrl = "";
+    if (Model.PostType == App.Ask.Library.Enums.PostType.Article)
+    {
+        returnUrl = Url.Action("Details", "Article", new { id = Model.PostId });
+    }
+    else if (Model.PostType == App.Ask.Library.Enums.PostType.Question)
+    {
+        returnUrl = Url.Action("Details", "Question", new { id = Model.PostId });
+    }
+    returnUrl = returnUrl + "#" + Model.Id;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <nav class="bg-white">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">首 页</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">修改评论</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form action="/" method="post" id="form">
+                <div class="card">
+                    <div class="card-header bg-light-blue">
+                        修改评论
+                    </div>
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="PostId" />
+                        <input type="hidden" asp-for="ParentId" />
+                        <textarea asp-for="Content"></textarea>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary mr-2" id="btn-save">保 存</button>
+                        <a href="@returnUrl" class="btn btn-secondary">返  回</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section js{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/assets/tinymce/tinymce.min.js"></script>
+
+    <script>
+        $(function () {
+            DomHelper.setTinymce("#Content", 300);
+            $("#btn-save").click(function () {
+                tinyMCE.triggerSave();
+                $("#btn-save").attr("disabled", "true");
+                $("#btn-save").html(`<span class="spinner-border spinner-border-sm" role="status"></span> 正在提交...`);
+                let form = document.getElementById("form");
+                AjaxHelper.postForm('@Url.Action("Edit","Comment")', form).done(function (result) {
+                    if (result.Success) {
+                        window.location.href = "@returnUrl";
+                    } else {
+                        AjaxHelper.showFormError(form, result);
+                    }
+                }).fail(function () {
+                    DialogHelper.showErrorDialog("提交失败");
+                }).always(function () {
+                    $("#btn-save").removeAttr("disabled");
+                    $("#btn-save").text("保 存");
+                })
+            })
+        })
+    </script>
+}
+
+
+

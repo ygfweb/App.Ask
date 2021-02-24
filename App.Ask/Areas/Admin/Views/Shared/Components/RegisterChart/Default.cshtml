@@ -1,0 +1,57 @@
+﻿@model RegisterChartComponentModel
+
+    <div class="row mt-2">
+        <div class="col">
+            <div class="chart-container bg-white p-2" style="height: 60vh; width: 100%">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            let dataList = [];
+            @foreach (var item in Model.Data)
+            {
+                @:dataList.push(@(item.CreateCount));
+            }
+            let labelList = [];
+            @foreach (var item in Model.Data)
+            {
+                 @:labelList.push('@(item.CreateDate.ToString("MM-dd"))');
+            }
+
+            var ctx = document.getElementById('myChart').getContext('2d');
+            let myChart = new Chart(ctx, {
+                type: 'line',
+                legend: {
+                    display: false
+                },
+                data: {
+                    labels: labelList,
+                    datasets: [{
+                        label: '注册会员',
+                        data: dataList,
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        lineTension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    title: {
+                        display: true,
+                        text: '最近一周注册会员'
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            })
+        })
+    </script>

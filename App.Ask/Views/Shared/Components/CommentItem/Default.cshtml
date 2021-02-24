@@ -1,0 +1,48 @@
+﻿@model CommentItemComponentModel
+@using App.Ask.Library.Enums
+
+
+
+
+<div class="media comment word_bread" id="@Model.CommentView.Id" data-nick-name="@Model.CommentView.NickName"  data-is-like="@(Model.IsLike? "true":"false")">
+    <a asp-controller="User" asp-action="Page" asp-route-id="@Model.CommentView.PersonId">
+        <img class="align-self-start rounded-circle mr-3" src="@Model.CommentView.Avatar" width="32" height="32">
+    </a>
+    <div class="media-body">
+        <div>
+            <a asp-controller="User" asp-action="Page" asp-route-id="@Model.CommentView.PersonId" class="mt-0 mr-3">@Model.CommentView.NickName</a>
+            <small class="text-muted">@Model.GetTimeString()</small>
+        </div>
+        @Html.Raw(await Model.GetQuoteAsync())
+        <div>
+            @Html.Raw(Model.CommentView.HtmlContent)
+        </div>
+        <div class="d-flex">
+            <div>
+                @if (Model.LoginPerson != null && Model.LoginPerson.Id == Model.CommentView.PersonId)
+                {
+                    <a class="mr-2" asp-controller="Comment" asp-action="Edit" asp-route-id="@Model.CommentView.Id"><small>编辑</small> </a>
+                }
+                @if (Model.LoginPerson != null && (Model.LoginPerson.Id == Model.CommentView.PersonId || Model.LoginPerson.RoleType == RoleType.Admin || Model.LoginPerson.RoleType == RoleType.Master || Model.LoginPerson.RoleType == RoleType.SuperAdmin))
+                {
+                    <a href="#" class="mr-2 btn-remove-comment"> <small>删除</small> </a>
+                }
+            </div>
+            <div class="ml-auto">
+                @if (Model.LoginPerson != null && Model.LoginPerson.Id == Model.CommentView.PersonId)
+                {
+                }
+                else
+                {
+                    <a href="#" class="btn-reply-comment mr-2"><i class="fa fa-commenting-o mr-1"></i><small>回复</small></a>
+                }
+                <a href="#" class="mr-2  btn-comment-item-like">
+                    <i class="fa fa-thumbs-up mr-1"></i>
+                    <small class="comment-item-like-text">@(Model.IsLike? "已赞":"点赞")</small>
+                    <small class="comment-item-like-num">@Model.CommentView.LikeNum</small>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<hr />

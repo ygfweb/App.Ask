@@ -1,0 +1,45 @@
+﻿@model App.Ask.Areas.Admin.Models.TopicEditModel
+
+@{
+    Layout = null;
+}
+
+<div class="modal fade" id="add_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form asp-action="Create" id="form" autocomplete="off" method="post">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="exampleModalLongTitle">增加话题</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="model">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="OrderNum" class="control-label"></label>
+                        <input asp-for="OrderNum"  class="form-control"/>
+                        <span asp-validation-for="OrderNum" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="IsHide" /> @Html.DisplayNameFor(model => model.IsHide)
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关 闭</button>
+                    <button type="submit" class="btn btn-primary" id="btn_save">保 存</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewData["Title"] = "创建帖子";
+}
+
+<div class="container">
+    <div class="row mt-2">
+        <div class="col-lg-6">
+            <a class="btn btn-block btn-outline-primary mt-2" asp-controller="Post" asp-action="CreateAsk">
+                <span class="fa fa-question-circle fa-5x"></span>
+                <p class="display-5 mt-3">提出问题</p>
+            </a>
+        </div>
+        <div class="col-lg-6">
+            <a class="btn btn-block btn-outline-info mt-2" asp-controller="Post" asp-action="CreateArticle">
+                <span class="fa  fa-newspaper-o fa-5x"></span>
+                <p class="display-5 mt-3">发表文章</p>
+            </a>
+        </div>
+    </div>
+</div>

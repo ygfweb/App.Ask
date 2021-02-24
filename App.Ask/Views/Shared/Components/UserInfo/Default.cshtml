@@ -1,0 +1,27 @@
+﻿@model UserInfoModel
+<div class="card shadow-sm">
+    <div class="card-body text-center bg-info">
+        <div class="user-box">
+            <img src="@Model.PersonView.Avatar" width="100" height="100" class="rounded-circle img-thumbnail" />
+        </div>
+        <h5 class="mb-1 text-white">@Model.PersonView.NickName</h5>
+        <h6 class="text-light">@Model.PersonView.RoleName</h6>
+        <a class="btn btn-warning btn-block" asp-controller="User" asp-action="Page" asp-route-id="@Model.PersonView.Id">个人主页</a>
+    </div>
+    <div class="card-body">
+        <div class="row text-center">
+            <div class="col p-2">
+                <h4 class="mb-1 line-height-5">@Model.GetAskNum()</h4>
+                <small class="mb-0">提问数</small>
+            </div>
+            <div class="col p-2">
+                <h4 class="mb-1 line-height-5">@Model.GetArticleNum()</h4>
+                <small class="mb-0">发文数</small>
+            </div>
+            <div class="col p-2">
+                <h4 class="mb-1 line-height-5">@Model.GetLikeNum()</h4>
+                <small class="mb-0">获取点赞</small>
+            </div>
+        </div>
+    </div>
+</div>

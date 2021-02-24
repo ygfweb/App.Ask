@@ -1,0 +1,16 @@
+﻿@model BestTagComponentModel
+
+@if (Model.Tags != null && Model.Tags.Count > 0)
+{
+    <div class="card mb-2 border-0 shadow-sm">
+        <div class="card-header  bg-white border-bottom">
+            热门标签
+        </div>
+        <div class="card-body p-2">
+            @foreach (var item in Model.Tags)
+            {
+                <a  asp-controller="Tag" asp-action="Details" asp-route-id="@item.Id" class="badge badge-green mr-1 mb-1">@item.Name</a>
+            }
+        </div>
+    </div>
+}

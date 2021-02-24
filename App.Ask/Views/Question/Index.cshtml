@@ -1,0 +1,33 @@
+﻿@model QuestionIndexModel
+@{
+    ViewData["Title"] = "问答";
+}
+@section head{
+    <vc:banner p-title="问答"></vc:banner>
+}
+
+<div class="container mt-2">
+    
+    <div class="row">
+        <div class="col-lg-9">
+            <vc:topic-navbar></vc:topic-navbar>
+            <div class="bg-white p-2  shadow-sm">
+                <vc:filter-navbar></vc:filter-navbar>
+                <vc:post-list p-post-views="@Model.PostViews.Data"></vc:post-list>
+                <vc:bootstrap-pager for-page-size="@Model.PostViews.PageSize" for-row-count="@Model.PostViews.RowCount"></vc:bootstrap-pager>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="sticky-sidebar">
+                <div class="card mb-2 border-0 shadow-sm">
+                    <div class="card-body">
+                        <a asp-controller="Post" asp-action="CreateAsk" class="btn btn-block btn-danger">我要提问</a>
+                    </div>
+                </div>
+                <vc:new-best-question></vc:new-best-question>
+                <vc:best-tag></vc:best-tag>
+            </div>
+          
+        </div>
+    </div>
+</div>

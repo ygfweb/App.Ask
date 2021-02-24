@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="renderer" content="webkit">
+    <title>@ViewData["Title"]</title>
+    <partial name="_CommonStyle" />
+    @RenderSection("css", false)
+</head>
+<body>
+    <partial name="_CommonScript" />
+    <partial name="_ValidationScriptsPartial" />
+    @await Component.InvokeAsync("Navbar")
+    @await Component.InvokeAsync("Sidebar")
+    <div class="app-page">
+        @RenderBody()
+    </div>
+    @RenderSection("js", required: false)
+    <script>
+        $(function() {
+             let _tempMsg = "@(TempData["_temp_msg"])";
+            if (_tempMsg) {
+                DialogHelper.showMessageDialog(_tempMsg);
+             }
+        });
+    </script>
+</body>
+</html>

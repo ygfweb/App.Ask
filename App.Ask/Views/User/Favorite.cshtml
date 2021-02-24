@@ -1,0 +1,42 @@
+﻿@model UserFavoriteViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <nav class="mt-2 bg-white">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">首 页</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">个人主页</li>
+                </ol>
+            </nav>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="sticky-sidebar">
+                <vc:user-info for-person-view="Model.PersonView"></vc:user-info>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="bg-white p-2">
+                <ul class="nav nav-tabs mb-2">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="User" asp-action="Page" asp-route-id="@Model.PersonView.Id">互动</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="User" asp-action="Article" asp-route-id="@Model.PersonView.Id">发文</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="User" asp-action="Question" asp-route-id="@Model.PersonView.Id">提问</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" asp-controller="User" asp-action="Favorite" asp-route-id="@Model.PersonView.Id">收藏</a>
+                    </li>
+                </ul>
+                <vc:post-list p-post-views="@Model.PagingResult.Data"></vc:post-list>
+                <vc:bootstrap-pager for-page-size="@Model.PagingResult.PageSize" for-row-count="@Model.PagingResult.RowCount"></vc:bootstrap-pager>
+            </div>
+        </div>
+    </div>
+</div>

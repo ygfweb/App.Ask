@@ -1,0 +1,206 @@
+﻿@model UserManageModel
+@{
+    ViewData["Title"] = "用户管理";
+}
+<div class="bg-white d-flex align-items-center justify-content-between">
+    <h5 class="mb-0 ml-2">用户管理</h5>
+    <ol class="breadcrumb mb-0 bg-white align-self-end">
+        <li class="breadcrumb-item">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index">首页</a>
+        </li>
+    </ol>
+</div>
+
+<div class="container-fluid" id="vue-app">
+    <div class="row">
+        <div class="col">
+            <div class="card mt-2">
+                <div class="card-body">
+                    <div class="row">
+                        <form autocomplete="off" class="form-inline" id="form-search">
+                            <div class="col-auto">
+                                <input type="text" asp-for="@Model.Search" class="form-control" value="" placeholder="输入登录账号或昵称" />
+                            </div>
+                            <div class="col-auto">
+                                <select asp-for="@Model.RoleFilter" asp-items="@Model.SelectListItems" class="form-control"></select>
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-outline-info" type="submit" title="搜索" id="btn-search">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                    <span class="ml-2">搜 索</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive mt-2">
+                <table class="table table-hover table-bordered bg-white table-nowrap">
+                    <thead>
+                        <tr class="table-warning">
+                            <th scope="col">头像</th>
+                            <th scope="col">登录账号</th>
+                            <th scope="col">昵称</th>
+                            <th scope="col">注册时间</th>
+                            <th scope="col">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.PagingResult.Data.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="5">
+                                    <span>暂无数据</span>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var item in Model.PagingResult.Data)
+                            {
+                                <tr id="@item.Id">
+                                    <td>
+                                        <img src="@item.Avatar" alt="头像" width="32" height="32" />
+                                    </td>
+                                    <td>@item.AccountName</td>
+                                    <td>@item.NickName</td>
+                                    <td>@item.CreateTime</td>
+                                    <td>
+                                        <a asp-controller="User" asp-action="Page" asp-route-id="@item.Id" asp-area="" target="_blank" class="btn btn-success btn-sm mr-2">个人主页</a>
+                                        <button class="btn btn-primary btn-sm mr-2" onclick="modifyRole('@item.Id')">设置角色</button>
+                                        @if (item.IsMute)
+                                        {
+                                            <button class="btn btn-outline-warning btn-sm mr-2 btn-mute" data-is-mute="@item.IsMute">恢复禁言</button>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-warning btn-sm mr-2 btn-mute" data-is-mute="@item.IsMute">禁言</button>
+                                        }
+                                        @if (item.IsDelete)
+                                        {
+                                            <button class="btn btn-outline-danger btn-sm mr-2 btn-delete" data-is-delete="@item.IsDelete">恢复删除</button>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-danger btn-sm mr-2 btn-delete" data-is-delete="@item.IsDelete">删除</button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <vc:bootstrap-pager for-page-size="@Model.PagingResult.PageSize" for-row-count="@Model.PagingResult.RowCount"></vc:bootstrap-pager>
+        </div>
+    </div>
+</div>
+
+<div id="placeholder"></div>
+
+<script>
+    // 弹出新增对话框
+  let placeholder = $("#placeholder");
+    function modifyRole(userId) {
+      let url = '@Url.Action("RoleModify","User")/?id=' + userId;
+      $.get(url).done(function (html) {
+        placeholder.html(html);
+      });
+    }
+    $(document).on("click", ".btn-delete", function (event) {
+      let parent = event.currentTarget.closest("tr");
+      let id = $(parent).attr("id");
+      let formData = new FormData();
+      let self = $(this);
+      formData.append("id", id);
+      if (self.data("is-delete") == "False") {
+        DialogHelper.showConfirmDialog("将要删除该用户，确认操作吗？", function () {
+          self.attr("disabled", "disabled");
+          AjaxHelper.postFormData('@Url.Action("Remove")',formData).done(function (result) {
+            if (result.Success) {
+                self.text("恢复删除");
+              self.removeClass("btn-danger");
+              self.addClass("btn-outline-danger");
+              self.data("is-delete", "True");
+              DialogHelper.showMessageDialog("操作成功");
+            } else {
+              DialogHelper.showErrorDialog(result.Message);
+            }
+          }).always(function () {
+            self.removeAttr("disabled");
+          })
+        })
+      } else {
+        DialogHelper.showConfirmDialog("将要恢复该用户，确认操作吗?", function () {
+          self.attr("disabled", "disabled");
+          AjaxHelper.postFormData('@Url.Action("RestoreRemove")',formData).done(function (result) {
+            if (result.Success) {
+              self.text("删除");
+              self.removeClass("btn-outline-danger");
+              self.addClass("btn-danger");
+              self.data("is-delete", "False");
+              DialogHelper.showMessageDialog("操作成功");
+            } else {
+              DialogHelper.showErrorDialog(result.Message);
+            }
+          }).always(function () {
+            self.removeAttr("disabled");
+          })
+        })
+      }
+    });
+
+
+    $(document).on("click", ".btn-mute", function (event) {
+      let parent = event.currentTarget.closest("tr");
+      let id = $(parent).attr("id");
+      let formData = new FormData();
+      let self = $(this);
+      formData.append("id", id);
+        if (self.data("is-mute") == "False") {
+        DialogHelper.showConfirmDialog("将要禁言该用户，确认操作吗？", function () {
+          self.attr("disabled", "disabled");
+          AjaxHelper.postFormData('@Url.Action("Mute")',formData).done(function (result) {
+            if (result.Success) {
+                self.text("恢复禁言");
+                self.removeClass("btn-warning");
+                self.addClass("btn-outline-warning");
+                self.data("is-mute", "True");
+              DialogHelper.showMessageDialog("操作成功");
+            } else {
+              DialogHelper.showErrorDialog(result.Message);
+            }
+          }).always(function () {
+            self.removeAttr("disabled");
+          })
+        })
+      } else {
+        DialogHelper.showConfirmDialog("将要恢复该用户，确认操作吗?", function () {
+          self.attr("disabled", "disabled");
+          AjaxHelper.postFormData('@Url.Action("RestoreMute")',formData).done(function (result) {
+              if (result.Success) {
+                self.text("删除");
+                self.removeClass("btn-outline-warning");
+                self.addClass("btn-warning");
+                self.data("is-mute", "False");
+                DialogHelper.showMessageDialog("操作成功");
+            } else {
+              DialogHelper.showErrorDialog(result.Message);
+            }
+          }).always(function () {
+            self.removeAttr("disabled");
+          })
+        })
+      }
+    });
+
+</script>

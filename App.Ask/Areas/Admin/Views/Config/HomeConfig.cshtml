@@ -1,0 +1,60 @@
+﻿@model App.Ask.Library.Setting.HomeConfig
+
+@{
+    ViewData["Title"] = "首页配置";
+}
+
+<div class="bg-white d-flex align-items-center justify-content-between">
+    <h5 class="mb-0 ml-2">首页配置</h5>
+    <ol class="breadcrumb mb-0 bg-white align-self-end">
+        <li class="breadcrumb-item">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index">首页</a>
+        </li>
+    </ol>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <form method="post" autocomplete="off">
+                <div class="card mt-2">
+                    <div class="card-header">
+                        首页配置
+                    </div>
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="SiteName" class="control-label"></label>
+                            <input asp-for="SiteName" class="form-control" />
+                            <span asp-validation-for="SiteName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="SiteUrl" class="control-label"></label>
+                            <input asp-for="SiteUrl" class="form-control" />
+                            <span asp-validation-for="SiteUrl" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CensusCode" class="control-label"></label>
+                            <input asp-for="CensusCode" class="form-control" />
+                            <span asp-validation-for="CensusCode" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="SeoDescription" class="control-label"></label>
+                            <input asp-for="SeoDescription" class="form-control" />
+                            <span asp-validation-for="SeoDescription" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="SiteFooter" class="control-label"></label>
+                            <input asp-for="SiteFooter" class="form-control" />
+                            <span asp-validation-for="SiteFooter" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary">提 交</button>
+                    </div>
+                </div>
+   
+            </form>
+        </div>
+    </div>
+</div>

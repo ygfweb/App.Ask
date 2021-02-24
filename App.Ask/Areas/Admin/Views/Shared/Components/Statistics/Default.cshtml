@@ -1,0 +1,27 @@
+﻿@model StatisticsComponentModel
+<div class="row">
+    <div class="col-sm-3 col-6">
+        <div class="bg-primary text-white p-3 text-center mt-2">
+            <p class="display-5">注册用户</p>
+            <p>@Model.UserCount</p>
+        </div>
+    </div>
+    <div class="col-sm-3 col-6">
+        <div class="bg-info text-white p-3 text-center  mt-2">
+            <p class="display-5">文章总数</p>
+            <p>@Model.ArticleCount</p>
+        </div>
+    </div>
+    <div class="col-sm-3 col-6">
+        <div class="bg-warning text-dark p-3 text-center  mt-2">
+            <p class="display-5">提问总数</p>
+            <p>@Model.QuestionCount</p>
+        </div>
+    </div>
+    <div class="col-sm-3 col-6">
+        <div class="bg-danger text-white p-3 text-center  mt-2">
+            <p class="display-5">评论总数</p>
+            <p>@Model.CommentCount</p>
+        </div>
+    </div>
+</div>

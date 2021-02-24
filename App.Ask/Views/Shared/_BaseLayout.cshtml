@@ -1,0 +1,28 @@
+﻿@using App.Ask.Library.BBL
+@inject ConfigService configService
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="renderer" content="webkit">
+    <vc:open-graph></vc:open-graph>
+    <title>@ViewData["Title"] | @configService.GetHomeConfigAsync().Result.SiteName</title>
+    <partial name="_CommonStyle" />
+    <link href="~/assets/pace.js/themes/pink/pace-theme-minimal.css" rel="stylesheet" />
+    @RenderSection("css", false)
+</head>
+<body class="word_bread">
+    <script src="~/assets/jquery/jquery.js"></script>
+    <script src="~/assets/pace.js/pace.js"></script>
+    <script src="~/src/common/js/utils.js" asp-append-version="true"></script>
+    @RenderBody()
+    <partial name="_Spinner" />
+    <partial name="_CommonScript" />
+    @RenderSection("js", required: false)
+</body>
+</html>
+
+

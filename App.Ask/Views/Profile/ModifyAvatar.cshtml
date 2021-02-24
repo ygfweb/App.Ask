@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewData["Title"] = "修改头像";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
+}
+
+<form method="post" autocomplete="off">
+    <div class="card mt-2">
+        <div class="card-header bg-primary text-white">
+            修改头像
+        </div>
+        <div class="card-body p-4">
+            <div class="d-flex flex-column align-items-center">
+                <input type="file" name="file" id="file" class="d-none"/>
+                <img src="@ViewData["avatar"]" alt="头像" width="128" height="128" class="rounded-circle" id="img"/>
+                <small class="text-muted mt-2">选择正方形的图片上传, 图像大小不要超过1MB</small>
+                <button id="btn" class="btn btn-primary mt-2" type="button"><i class="fa fa-upload mr-3" id="btn-icon"></i><span id="btn-text">选择图片</span></button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<script>
+    $(function () {
+        let fileDom = document.getElementById("file");
+        file.addEventListener("change", function () {
+            let file = fileDom.files[0];
+            var name = file.name;
+            if (!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(name)) {
+                DialogHelper.showErrorDialog("上传文件必须图片类型");
+                fileDom.value = "";
+            } else {
+                $("#btn").attr("disabled", "disabled");
+                $("#btn-icon").addClass("fa-circle-o-notch fa-spin");
+                $("#btn-icon").removeClass("fa-upload");
+                $("#btn-text").text("正在上传");
+                let formData = new FormData();
+                formData.append("file", file);
+                AjaxHelper.postFormData("@Url.Action("ModifyAvatar")", formData).done(function (result) {
+                    if (result.Success) {
+                        $("#img").attr("src", result.Context);
+                    } else {
+                        DialogHelper.showErrorDialog(result.Message);
+                    }
+                }).always(function () {
+                    fileDom.value = "";
+                    $("#btn").removeAttr("disabled");
+                    $("#btn-icon").removeClass("fa-circle-o-notch fa-spin");
+                    $("#btn-icon").addClass("fa-upload");
+                     $("#btn-text").text("选择图片");
+                })
+            }
+        })
+        $("#btn").click(function () {
+            fileDom.click();
+        })
+    })
+</script>

@@ -1,0 +1,126 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>936ed876-3032-49e7-989b-7d16ebe762e9</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\upload\**" />
+    <Content Remove="wwwroot\upload\**" />
+    <EmbeddedResource Remove="wwwroot\upload\**" />
+    <None Remove="wwwroot\upload\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\ClearTables.sql" />
+    <None Remove="Resources\CreateTables.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ClearTables.sql" />
+    <EmbeddedResource Include="Resources\CreateTables.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.28" />
+    <PackageReference Include="HtmlSanitizer" Version="5.0.355" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.9" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Npgsql" Version="4.1.5" />
+    <PackageReference Include="SiHan.Asp.Logger" Version="3.1.1" />
+    <PackageReference Include="SiHan.Html.Templates" Version="1.0.1" />
+    <PackageReference Include="SiHan.Libs.Ado" Version="2.0.1" />
+    <PackageReference Include="SiHan.Libs.Image" Version="4.0.0" />
+    <PackageReference Include="SiHan.Libs.Mapper" Version="1.0.0" />
+    <PackageReference Include="SiHan.Libs.Utils" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Areas\Admin\Views\Shared\_CommonScript.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\_CommonStyle.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\_Spinner.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\_ValidationScriptsPartial.cshtml" />
+    <None Include="compilerconfig.json" />
+    <None Include="wwwroot\assets\tinymce\icons\default\icons.min.js" />
+    <None Include="wwwroot\assets\tinymce\jquery.tinymce.min.js" />
+    <None Include="wwwroot\assets\tinymce\langs\readme.md" />
+    <None Include="wwwroot\assets\tinymce\plugins\advlist\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\anchor\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\autolink\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\autoresize\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\autosave\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\bbcode\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\charmap\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\codesample\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\code\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\colorpicker\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\contextmenu\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\directionality\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\emoticons\js\emojiimages.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\emoticons\js\emojiimages.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\emoticons\js\emojis.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\emoticons\js\emojis.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\emoticons\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\fullpage\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\fullscreen\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\help\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\hr\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\imagetools\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\image\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\importcss\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\insertdatetime\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\legacyoutput\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\link\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\lists\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\media\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\nonbreaking\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\noneditable\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\pagebreak\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\paste\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\preview\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\print\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\quickbars\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\save\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\searchreplace\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\spellchecker\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\tabfocus\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\table\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\template\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\textcolor\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\textpattern\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\toc\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\visualblocks\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\visualchars\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\plugins\wordcount\plugin.min.js" />
+    <None Include="wwwroot\assets\tinymce\themes\mobile\theme.min.js" />
+    <None Include="wwwroot\assets\tinymce\themes\silver\theme.min.js" />
+    <None Include="wwwroot\assets\tinymce\tinymce.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+  </ItemGroup>
+
+</Project>

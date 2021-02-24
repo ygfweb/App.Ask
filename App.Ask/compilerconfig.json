@@ -1,0 +1,14 @@
+﻿[
+  {
+    "outputFile": "wwwroot/src/site/page/register/register.css",
+    "inputFile": "wwwroot/src/site/page/register/register.scss"
+  },
+  {
+    "outputFile": "wwwroot/src/site/common/css/theme.css",
+    "inputFile": "wwwroot/src/site/common/css/theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/src/site/page/login/login.css",
+    "inputFile": "wwwroot/src/site/page/login/login.scss"
+  }
+]

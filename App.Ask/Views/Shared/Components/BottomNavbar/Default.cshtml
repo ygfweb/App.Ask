@@ -1,0 +1,56 @@
+﻿@model BottomNavbarComponentModel
+@using App.Ask.Library.Enums
+
+<nav class=" bottom-nav navbar fixed-bottom  bg-light navbar-light navbar-expand justify-content-center p-0 d-block d-lg-none">
+    <div class="container">
+        <ul class="navbar-nav nav-justified w-100 text-center mt-1">
+            <li class="nav-item">
+                <a href="/" class="nav-link d-flex flex-column">
+                    <span class="fa fa-home fa-lg"></span>
+                    <span class="mt-1">首页</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Question" asp-action="Index" class="nav-link d-flex flex-column">
+                    <span class="fa fa-question-circle fa-lg"></span>
+                    <span class="mt-1">问答</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link d-flex flex-column" asp-controller="Home" asp-action="CreatePost">
+                    <span class="fa fa-plus fa-lg"></span>
+                    <span class="mt-1">发起</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Article" asp-action="Index" class="nav-link d-flex flex-column">
+                    <span class="fa fa-newspaper-o fa-lg"></span>
+                    <span class="mt-1">文章</span>
+                </a>
+            </li>
+
+            <li class="nav-item dropup">
+                <a href="#" class="nav-link d-flex flex-column" data-toggle="dropdown" >
+                    <span class="fa fa-user-circle-o fa-lg"></span>
+                    <span class="mt-1">我的</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    @if (Model.Person == null)
+                    {
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Login">个人主页</a>
+                    }
+                    else
+                    {
+                        <a class="dropdown-item" asp-controller="User" asp-action="Page" asp-route-id="@Model.Person.Id">个人主页</a>
+                    }
+                    <a class="dropdown-item"asp-controller="Profile" asp-action="Info">修改资料</a>
+                    @if (Model.Person != null && (Model.Person.RoleType == RoleType.Admin || Model.Person.RoleType == RoleType.SuperAdmin))
+                    {
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">后台管理</a>
+                    }
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>

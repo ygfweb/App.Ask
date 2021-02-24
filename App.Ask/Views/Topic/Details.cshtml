@@ -1,0 +1,21 @@
+﻿@model TopicDetailsModel
+@{
+    ViewData["Title"] = Model.Topic.Name;
+}
+
+
+@section head{
+    <vc:banner p-title="@Model.Topic.Name"></vc:banner>
+}
+
+<div class="container mt-2">
+    <div class="row">
+        <div class="col">
+            <div class="bg-white p-2  shadow-sm">
+                <vc:filter-navbar></vc:filter-navbar>
+                <vc:post-list p-post-views="@Model.PagingResult.Data"></vc:post-list>
+                <vc:bootstrap-pager for-page-size="@Model.PagingResult.PageSize" for-row-count="@Model.PagingResult.RowCount"></vc:bootstrap-pager>
+            </div>
+        </div>
+    </div>
+</div>

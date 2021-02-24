@@ -1,0 +1,78 @@
+.app-navbar {
+  background-color: #7b1fa2;
+  user-select: none;
+  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+  .nav-link {
+    span.indent {
+      margin-left: 3px;
+      margin-right: 3px;
+    }
+  }
+}
+
+.app-navbar-brand {
+  padding: 15px 16px;
+  width: 250px;
+  background-color: #6a1b9a;
+  > img {
+    margin-right: 10px;
+    height: 30px;
+    width: 30px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .app-navbar-brand {
+    display: none;
+  }
+}
+
+.navbar-toggler {
+  display: block;
+  margin-left: 10px;
+}
+
+.app-page {
+  display: block;
+  overflow-y: auto;
+  transition: all 0.2s ease;
+}
+@media (min-width: 768px){
+  .app-page{
+    width: calc(100vw - 250px);
+    height: calc(100vh - 60px);
+    margin-top: 60px;
+    margin-left: 250px;
+    //left: 250px;
+    //top: 60px;
+    &.toggle{
+      width: 100vw;
+      margin-left: 0;
+    }
+  }
+}
+@media (max-width: 767.98px){
+  .app-page{
+    width: 100vw;
+    height: calc(100vh - 40px);
+    margin-left: 0;
+    margin-top: 40px;
+    &.toggle{
+      margin-left: 250px;
+    }
+  }
+}
+
+.app-page-header {
+  margin: 15px;
+  border-bottom: 1px dashed #D6D6D6;
+
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .small-text {
+    margin-left: 10px;
+  }
+}

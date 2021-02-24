@@ -1,0 +1,50 @@
+﻿@model App.Ask.Library.Setting.PageConfig
+
+@{
+    ViewData["Title"] = "页面配置";
+}
+
+<div class="bg-white d-flex align-items-center justify-content-between">
+    <h5 class="mb-0 ml-2">页面配置</h5>
+    <ol class="breadcrumb mb-0 bg-white align-self-end">
+        <li class="breadcrumb-item">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index">首页</a>
+        </li>
+    </ol>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <form method="post" autocomplete="off">
+                <div class="card mt-2">
+                    <div class="card-header">
+                        页面配置
+                    </div>
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="PageSize" class="control-label"></label>
+                            <input asp-for="PageSize" class="form-control" />
+                            <span asp-validation-for="PageSize" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="RegisterAlert" class="control-label"></label>
+                            <input asp-for="RegisterAlert" class="form-control" />
+                            <span asp-validation-for="RegisterAlert" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="LoginAlert" class="control-label"></label>
+                            <input asp-for="LoginAlert" class="form-control" />
+                            <span asp-validation-for="LoginAlert" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary">提 交</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

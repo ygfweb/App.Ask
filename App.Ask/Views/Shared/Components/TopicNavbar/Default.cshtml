@@ -1,0 +1,9 @@
+﻿@model TopicNavbarComponentModel
+<ul class="nav nav-pills mb-2 text-nowrap flex-nowrap overflow-x-auto  shadow-sm overflow-x-auto bg-light-blue">
+    @foreach (var item in Model.Topics)
+    {
+        <li class="nav-item">
+            <a class="@Model.GetCss(item)" href="@Model.GetUrl(item)">@item.Name</a>
+        </li>
+    }
+</ul>

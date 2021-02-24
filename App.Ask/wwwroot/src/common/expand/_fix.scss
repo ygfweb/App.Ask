@@ -1,0 +1,47 @@
+//移除按钮、a标签点击时的外边框
+//去掉按钮点击时四周的虚线
+a,
+a:active,
+a:focus,
+button,
+button:focus,
+button:active,
+.btn,
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn.focus:active,
+.btn.active.focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+th {
+    font-weight: normal;
+}
+
+.table {
+    thead th {
+        vertical-align: bottom;
+        border-bottom: $table-border-width solid $table-border-color;
+    }
+}
+
+.datepicker-margin{
+    margin-top: 60px;
+}
+
+.note-toolbar{
+    z-index: 9;
+}
+.tokenfield .token-input{
+    margin-bottom:0;
+}
+.component-border{
+    border: 1px solid #ced4da;
+}
+
+.navbar-expand .navbar-toggler {
+  display: block;
+}

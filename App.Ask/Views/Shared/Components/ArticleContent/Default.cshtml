@@ -1,0 +1,236 @@
+﻿@model ArticleContentComponentModel
+
+<div class="card mt-2 border-0">
+    <div class="card-body">
+        <h1 class="h2">@Model.Post.Title</h1>
+        <div>
+            @if (Model.IsAdmin())
+            {
+                @if (Model.Post.IsBest)
+                {
+                    <button class="btn btn-info btn-sm py-0" id="btn-set-best-post">精华贴</button>
+                }
+                else
+                {
+                    <button class="btn btn-outline-info btn-sm py-0" id="btn-set-best-post">设为精华</button>
+                }
+                if (Model.Post.IsTop)
+                {
+                    <button class="btn btn-success btn-sm py-0" id="btn-set-top-post">已置顶</button>
+                }
+                else
+                {
+                    <button class="btn btn-outline-info btn-sm py-0" id="btn-set-top-post">设为置顶</button>
+                }
+            }
+            else
+            {
+                @if (Model.Post.IsBest)
+                {
+                    <button class="btn btn-info btn-sm py-0">精华贴</button>
+                }
+                if (Model.Post.IsTop)
+                {
+                    <button class="btn btn-success btn-sm py-0">已置顶</button>
+                }
+            }
+            @if (Model.LoginPerson != null && Model.LoginPerson.Id == Model.Post.PersonId)
+            {
+                @if (Model.Post.PostType == App.Ask.Library.Enums.PostType.Article)
+                {
+                    <a asp-controller="Post" asp-action="ModifyArticle" asp-route-id="@Model.Post.Id" class="btn btn-outline-info btn-sm py-0">编辑</a>
+                }
+                else
+                {
+                    <a asp-controller="Post" asp-action="ModifyAsk" asp-route-id="@Model.Post.Id" class="btn btn-outline-info btn-sm py-0">编辑</a>
+                }
+
+                <button class="btn btn-outline-info btn-sm py-0" id="btn-block-post">屏蔽</button>
+            }
+            else if (Model.IsAdmin())
+            {
+                <button class="btn btn-outline-info btn-sm py-0" id="btn-block-post">屏蔽</button>
+            }
+        </div>
+        <div class="mt-2">
+            <a asp-controller="User" asp-action="Page" asp-route-id="@Model.PublicPerson.Id" class="mr-3">
+                <img src="@Model.PublicPerson.Avatar" width="24" height="24" class="mr-2 rounded-circle" alt="头像" />
+                <small>@Model.PublicPerson.NickName </small>
+            </a>
+            <small class="text-muted mr-2">@Model.GetTime()</small>
+            <small class="text-muted mr-2">阅读(@Model.Post.ViewNum)</small>
+            <a asp-controller="Topic" asp-action="Details" asp-route-id="@Model.Topic.Id" title="话题" class="mr-2">
+                <i class="fa fa-th-large text-muted mr-1" aria-hidden="true"></i> <small>@Model.Topic.Name</small>
+            </a>
+            <i class="fa fa-tags mr-1 text-muted" aria-hidden="true"></i>
+            <div class="d-inline-block">
+                @foreach (var item in Model.Tags)
+                {
+                    <a class="badge badge-light text-muted" asp-controller="Tag" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
+                }
+            </div>
+        </div>
+        <hr />
+        @Html.Raw(Model.PostData.HtmlContent)
+    <div class="text-center">
+        @if (Model.Post.PostType == App.Ask.Library.Enums.PostType.Article)
+        {
+            <button class="btn btn-sm  btn-outline-info mr-2" id="btn-post-like">
+                <i class="fa fa-thumbs-up"></i>
+                @if (Model.IsLikePost)
+                {
+                    <span id="post-like-text">已赞</span>
+                }
+                else
+                {
+                    <span id="post-like-text">点赞</span>
+                }
+                <span id="post-like-num">@Model.Post.LikeNum</span>
+            </button>
+        }
+
+        @if (Model.LoginPerson != null && Model.LoginPerson.Id != Model.Post.PersonId)
+        {
+            <button class="btn btn-sm  btn-outline-info mr-2" id="btn-favorite-post"> <span class="fa fa-heart"></span> <span id="favorite-post-text">@(Model.IsFavoritePost?"已收藏":"收藏")</span></button>
+        }
+
+        @if (Model.Post.PostType == App.Ask.Library.Enums.PostType.Article)
+        {
+            <a class="btn btn-sm  btn-outline-info mr-2" href="#" id="btn-comment"><i class="fa fa-commenting" aria-hidden="true"></i> 发表评论</a>
+        }
+        else
+        {
+            <a class="btn btn-sm  btn-outline-info mr-2" href="#" id="btn-comment"><i class="fa fa-commenting" aria-hidden="true"></i> 回答问题</a>
+        }
+    </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        let isLike = @(Model.IsLikePost? "true":"false");
+        const isLogin = @(Model.LoginPerson != null ? "true":"false");
+        let isFavorite = @(Model.IsFavoritePost ? "true":"false");
+        const isAdmin = @(Model.IsAdmin() ? "true":"false");
+        const isSelf = @(Model.IsSelf() ? "true":"false");
+        let isTop =  @(Model.Post.IsTop? "true":"false");
+        let isBest =  @(Model.Post.IsBest? "true":"false");
+        $("#btn-comment").click(function () {
+            if (isLogin == false) {
+                location.href = '@Url.Action("Login","Account")' +"?ReturnUrl=@Model.CurrentUrl";
+            } else {
+                location.hash = "";
+                location.hash = "#btn-public-comments";
+                tinymce.execCommand('mceFocus', false, 'comments');
+            }
+            return false;
+        });
+        $("#btn-post-like").click(function () {
+            if (!isLike) {
+                let formData = new FormData();
+                formData.append("id", '@Model.Post.Id');
+                $("#btn-post-like").attr({ "disabled": "disabled" });
+                AjaxHelper.postFormData('@Url.Action("LikePost", "Like")', formData).done(function (result) {
+                    if (result.Success) {
+                        isLike = true;
+                        $("#post-like-num").text(result.Context);
+                        $("#post-like-text").text("已赞");
+                    } else {
+                        DialogHelper.showErrorDialog(result.Message);
+                    }
+                }).fail(function () {
+                    DialogHelper.showToastError("操作失败");
+                }).always(function () {
+                    $("#btn-post-like").removeAttr("disabled");
+                })
+            }
+            return false;
+        });
+        $("#btn-favorite-post").click(function () {
+            if (!isFavorite) {
+                let formData = new FormData();
+                formData.append("postId", '@Model.Post.Id');
+                AjaxHelper.postFormData("@Url.Action("Add", "Favorite")", formData).done(function (result) {
+                    if (result.Success) {
+                        isFavorite = true;
+                        $("#favorite-post-text").text("已收藏");
+                    } else {
+                        DialogHelper.showErrorDialog(result.Message);
+                    }
+                }).fail(function () {
+                    DialogHelper.showErrorDialog("操作失败");
+                })
+            }
+        });
+        $("#btn-set-best-post").click(function () {
+            if (isAdmin) {
+                let formData = new FormData();
+                formData.append("postId", '@Model.Post.Id');
+                formData.append("isBest", !isBest);
+                $("#btn-set-best-post").attr("disabled", "disabled");
+                AjaxHelper.postFormData("@Url.Action("SetBest", "Api")", formData).done(function (result) {
+                    if (result.Success) {
+                        isBest = !isBest;
+                        if (isBest) {
+                            $("#btn-set-best-post").removeClass("btn-outline-info").addClass("btn-info").text("精华贴");
+                        } else {
+                            $("#btn-set-best-post").removeClass("btn-info").addClass("btn-outline-info").text("设为精华");
+                        }
+                    } else {
+                        DialogHelper.showErrorDialog(result.Message);
+                    }
+                }).fail(function () {
+                    DialogHelper.showMessageDialog("操作失败");
+                }).always(function () {
+                    $("#btn-set-best-post").removeAttr("disabled");
+                })
+            }
+        });
+        $("#btn-set-top-post").click(function () {
+            if (isAdmin) {
+                let formData = new FormData();
+                formData.append("postId", '@Model.Post.Id');
+                formData.append("isTop", !isTop);
+                $("#btn-set-top-post").attr("disabled", "disabled");
+                AjaxHelper.postFormData("@Url.Action("SetTop", "Api")", formData).done(function (result) {
+                    if (result.Success) {
+                        isTop = !isTop;
+                        if (isTop) {
+                            $("#btn-set-top-post").removeClass("btn-outline-info").addClass("btn-info").text("已置顶");
+                        } else {
+                            $("#btn-set-top-post").removeClass("btn-info").addClass("btn-outline-info").text("设为置顶");
+                        }
+                    } else {
+                        DialogHelper.showErrorDialog(result.Message);
+                    }
+                }).fail(function () {
+                    DialogHelper.showMessageDialog("操作失败");
+                }).always(function () {
+                    $("#btn-set-top-post").removeAttr("disabled");
+                })
+            }
+        });
+        $("#btn-block-post").click(function () {
+            if (isAdmin || isSelf) {
+                DialogHelper.showConfirmDialog("屏蔽该文后，此文将不可见，确认操作吗?", function () {
+                    let formData = new FormData();
+                    formData.append("postId", '@Model.Post.Id');
+                    $("#btn-block-post").attr("disabled", "disabled");
+                    AjaxHelper.postFormData("@Url.Action("BlockPost", "Api")", formData).done(function (result) {
+                        if (result.Success) {
+                            $("#btn-block-post").text("已屏蔽");
+                            DialogHelper.showMessageDialog("该帖子已被屏蔽，刷新页面后将不可见");
+                        } else {
+                            DialogHelper.showErrorDialog(result.Message);
+                        }
+                    }).fail(function () {
+                        DialogHelper.showMessageDialog("操作失败");
+                    }).always(function () {
+                        $("#btn-set-top-post").removeAttr("disabled");
+                    })
+                })
+            }
+        })
+    })
+</script>
+

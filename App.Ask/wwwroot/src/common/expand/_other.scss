@@ -1,0 +1,39 @@
+.indent{
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.indent-left{
+  margin-left: 5px;
+}
+.indent-right{
+  margin-right: 5px;
+}
+
+.hand-pointer{
+  cursor: pointer;
+}
+.no-select{
+  user-select:none;
+}
+
+.spinner-wrapper {
+  display: block;
+  position: fixed;
+  z-index: 1031;
+  top: 30%;
+  right: 50%; /* or: left: 50%; */
+  margin-top: -20px; /* have of the elements height */
+  margin-right: -20px; /* have of the elements widht */
+}
+
+.table-nowrap{
+  th,td{
+    white-space: nowrap;
+  }
+}
+
+.display-5 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+}

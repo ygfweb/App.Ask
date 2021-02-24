@@ -1,0 +1,145 @@
+﻿@model CommentListComponentModel
+
+
+<fieldset class="title my-1"><legend class="inner">回 复</legend></fieldset>
+@foreach (var item in Model.CommentViews)
+{
+    <vc:comment-item p-comment-view="@item" p-login-person="@Model.LoginUser"></vc:comment-item>
+}
+
+@if (Model.LoginUser == null)
+{
+    <div class="alert alert-warning text-center" role="alert">
+        您需要 <a class="alert-link" href='@(Url.Action("Login","Account")+"?ReturnUrl="+Model.CurrentUrl)'>登录</a>才能发表评论
+    </div>
+}
+else
+{
+    <form id="comment-form" method="post" autocomplete="off">
+        <div class="form-group mt-2">
+            <div class="alert alert-success mb-0 rounded-0" id="comment-quote" role="alert" style="display: none;">
+                <a href="#" class="alert-link" id="comment-quote-name">@@wind</a>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" id="comment-quote-close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <textarea class="form-control" rows="3" id="comments"></textarea>
+        </div>
+        <div class="d-flex mb-2">
+            <button type="button" class="btn btn-primary ml-auto" id="btn-public-comments">发布评论</button>
+        </div>
+    </form>
+}
+
+
+<script>
+    $(function () {
+        const postId = '@Model.PostId';
+        let parentId = '';
+        const isLogin = @(Model.LoginUser != null ? "true":"false");
+        DomHelper.setTinymce("comments", 200);
+        $(document).on("click", '.btn-reply-comment', function (event) {
+            if (isLogin == false) {
+                location.href = '@Url.Action("Login","Account")' + "?ReturnUrl=@Model.CurrentUrl";
+            } else {
+                let parent = event.currentTarget.closest(".media");
+                parentId = $(parent).attr("id");
+                let nick_name = $(parent).data("nick-name");
+                $("#comment-quote-name").text("@@" + nick_name);
+                $("#comment-quote").show();
+                location.hash = "";
+                location.hash = "#btn-public-comments";
+                tinymce.execCommand('mceFocus', false, 'comments');
+                return false;
+            }
+        });
+        $("#comment-quote-close").click(function () {
+            parentId = "";
+            $("#comment-quote").hide();
+            return false;
+        })
+        // 删除评论
+        $(document).on("click",'.btn-remove-comment', function (event) {
+            let parent = event.currentTarget.closest(".media");
+            let id = $(parent).attr("id");
+            DialogHelper.showConfirmDialog("将删除此条评论，确认操作吗？", function () {
+                let formData = new FormData();
+                formData.append("id", id);
+                AjaxHelper.postFormData("@Url.Action("Delete", "Comment")", formData).done(function (result) {
+                    if (result.Success) {
+                        $(parent).fadeOut(300, function () {
+                            $(this).next('hr').remove();
+                            $(this).remove();
+                        });
+                    } else {
+                        DialogHelper.showErrorDialog(result.Message);
+                    }
+                })
+            })
+            return false;
+        })
+
+        // 评论点赞
+        $(document).on('click', '.btn-comment-item-like', function (event) {
+            let parent = event.currentTarget.closest(".media");
+            let id = $(parent).attr("id");
+            let isLike = $(parent).data("is-like");
+            if (!isLike) {
+                let formData = new FormData();
+                formData.append("id", id);
+                AjaxHelper.postFormData('@Url.Action("LikeComment", "Like")', formData).done(function (result) {
+                    if (result.Success) {
+                        $(parent).find(".comment-item-like-num").text(result.Context);
+                        $(parent).find(".comment-item-like-text").text("已赞");
+                        $(parent).data("is-like", true);
+                    } else {
+                        DialogHelper.showErrorDialog(result.Message);
+                    }
+                }).fail(function () {
+                    DialogHelper.showToastError("操作失败");
+                }).always(function () {
+                    $("#btn-post-like").removeAttr("disabled");
+                })
+            }
+            return false;
+        })
+
+        // 发布评论
+        $("#btn-public-comments").click(function () {
+                tinyMCE.triggerSave();
+                let c = tinyMCE.get("comments").getContent();
+                if ($.trim(c) == '') {
+                    DialogHelper.showErrorDialog("提交内容不能为空");
+                } else {
+                    let jsonObj = {
+                        PostId: postId,
+                        Content: c,
+                        ParentId: parentId,
+                        Id: ''
+                    };
+                    $("#btn-public-comments").html(`<span class="spinner-border spinner-border-sm" role="status"></span> 正在提交...`);
+                    $("#btn-public-comments").attr("disabled", "disabled");
+                    $.ajax({
+                        url: "@Url.Action("Create", "Comment")",
+                        data: JSON.stringify(jsonObj),
+                        method: "POST",
+                        dataType: "text",
+                        contentType: "application/json; charset=utf-8",
+                        processData: true,
+                        cache: false,
+                    }).done(function (result) {
+                        parentId = '';
+                        $("#comment-quote").hide();
+                        $(result).hide().insertBefore("#comment-form").fadeIn(300);
+                        tinyMCE.get("comments").setContent("");
+                    }).fail(function () {
+                        DialogHelper.showErrorDialog("提交失败");
+                    }).always(function () {
+                        $("#btn-public-comments").removeAttr("disabled");
+                        $("#btn-public-comments").text("发 布");
+                    })
+                }
+            return false;
+        })
+    });
+</script>

@@ -1,0 +1,60 @@
+﻿@model ProfileInfoEditModel
+@{
+    ViewData["Title"] = "Info";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
+}
+
+<form method="post" autocomplete="off" id="form">
+    <div class="card mt-2">
+        <div class="card-header bg-info text-white">
+            个人资料
+        </div>
+        <div class="card-body">
+            <div class="form-group form-row">
+                <label asp-for="AccountName" class="col-sm-2 col-form-label text-md-right">登录账号</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control" asp-for="AccountName">
+                </div>
+            </div>
+            <div class="form-group form-row">
+                <label asp-for="NickName" class="col-sm-2 col-form-label text-md-right">昵称</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" asp-for="NickName" />
+                    <div class="invalid-feedback d-block">
+                        <span asp-validation-for="NickName"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary" id="btn-save">保 存</button>
+        </div>
+    </div>
+</form>
+
+@section js{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(function () {
+          let formDom = document.getElementById("form");
+          $(formDom).data("validator").settings.submitHandler = function () {
+            let formData = new FormData(form);
+            $("#btn-save").attr("disabled", "disabled");
+            AjaxHelper.postFormData('@Url.Action("Info")', formData).done(function (result) {
+              if (result.Success) {
+                DialogHelper.showSuccess("操作成功");
+              } else {
+                  AjaxHelper.showFormError(formDom, result);
+              }
+            }).fail(function () {
+              DialogHelper.showErrorDialog("操作失败");
+            }).always(function () {
+              $("#btn-save").removeAttr("disabled");
+            });
+            return false;
+          };
+        });
+    </script>
+
+}
+

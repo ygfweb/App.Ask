@@ -1,0 +1,130 @@
+﻿@model TopNavbarComponentModel
+@using App.Ask.Library.Enums
+
+
+<div class="bg-blue sticky-top">
+    <div class="container">
+        @{ /* 移动端可见 */ }
+        <div class="d-block d-lg-none">
+            <div class="navbar  navbar-expand navbar-dark">
+                <ul class="navbar-nav">
+                    <li>
+                        <a asp-controller="Search" asp-action="Index" class="nav-link p-0">
+                            <span class="navbar-icon"> <i class="fa fa-search fa-lg"></i></span>
+                        </a>
+                    </li>
+                </ul>
+                <a class="navbar-brand mx-auto" href="/">@Model.SiteName</a>
+                <ul class="navbar-nav">
+                    <li>
+                        @if (Model.IsLogin)
+                        {
+                            <a  class="nav-link signout p-0" >
+                                <span class="navbar-icon"> <i class="fa fa-sign-out fa-lg"></i></span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login" class="nav-link p-0">
+                                <span class="navbar-icon"> <i class="fa fa-user-circle-o fa-lg"></i></span>
+                            </a>
+                        }
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        @{ /* pc端可见 */ }
+        <div class="d-none d-lg-block">
+            <nav class="navbar  navbar-expand navbar-dark">
+                <a class="navbar-brand mr-2" href="/">@Model.SiteName</a>
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active ml-2">
+                        <a href="/" class="nav-link">
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                            <span class="ml-1">首页</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Question" asp-action="Index">
+                            <i class="fa fa fa-question-circle"></i>
+                            <span class="ml-1">问答</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Article" asp-action="Index">
+                            <i class="fa fa-file-text mr-1"></i>
+                            <span class="ml-1">文章</span>
+                        </a>
+                    </li>
+                </ul>
+                @if (ViewData["IsHideSearch"] == null || Convert.ToBoolean(ViewData["IsHideSearch"]) == false)
+                {
+                    <form class="form-inline" id="top-search-form" method="get" action="@Url.Action("Index","Search")">
+                        <div class="input-group">
+                            <input type="text" class="form-control border border-right-0 pr-0" name="q">
+                            <span class="input-group-append">
+                                <button class="btn border border-left-0" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </form>
+                }
+                <ul class="navbar-nav ml-3">
+                    @if (Model.IsLogin)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                                <i class="fa fa-user-circle mr-1"></i>
+                                <span class="ml-1">@Model.Person.NickName</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                @if (Model.Role.RoleType == RoleType.Admin ||  Model.Role.RoleType == RoleType.SuperAdmin)
+                                {
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">后台管理</a>
+                                }
+                                <a class="dropdown-item" asp-controller="User" asp-action="Page" asp-route-id="@Model.Person.Id">个人主页</a>
+                                <a class="dropdown-item" asp-controller="Profile" asp-action="Info">修改资料</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link signout" href="#">
+                                <i class="fa fa-sign-out mr-1"></i>
+                                <span class="ml-1">退出</span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Account" asp-action="Login">
+                                <i class="fa fa-sign-in mr-1"></i>
+                                <span class="ml-1">登录</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Account" asp-action="Register">
+                                <i class="fa fa-user-plus mr-1"></i>
+                                <span class="ml-1">注册</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $(".signout").click(function () {
+            DialogHelper.showConfirmDialog("将退出登录，确认吗？", function () {
+                window.location.href = "/account/logout";
+            });
+            return false;
+        });
+    });
+</script>

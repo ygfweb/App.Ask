@@ -1,0 +1,167 @@
+﻿@model InviteIndexModel
+@{
+    ViewData["Title"] = "邀请设置";
+}
+
+<div class="bg-white d-flex align-items-center justify-content-between">
+    <h5 class="mb-0 ml-2">邀请设置</h5>
+    <ol class="breadcrumb mb-0 bg-white align-self-end">
+        <li class="breadcrumb-item">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index">首页</a>
+        </li>
+    </ol>
+</div>
+
+<div class="container-fluid" id="vue-app">
+    <div class="row">
+        <div class="col">
+            <div class="card mt-2">
+                <div class="card-body">
+                    <div class="form-row align-items-center">
+                        <div class="col-auto">
+                            <button class="btn btn-primary" id="btn-add">增加邀请码</button>
+                        </div>
+                        <div class="col-auto">
+                            <div class="ml-2 form-check">
+                                @if (Model.IsEnableInviteCode)
+                                {
+                                    <input type="checkbox" class="form-check-input" id="IsEnableInviteCode" checked="checked">
+                                }
+                                else
+                                {
+                                    <input type="checkbox" class="form-check-input" id="IsEnableInviteCode">
+                                }
+                                <label class="form-check-label no-select" asp-for="IsEnableInviteCode">开启邀请码注册</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive mt-2">
+                <table class="table table-hover table-bordered bg-white table-nowrap">
+                    <thead>
+                        <tr class="table-warning">
+                            <th scope="col">邀请码</th>
+                            <th scope="col">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        <tr v-if="isLoaded == false">
+                            <td colspan="4">
+                                <div class="p-2 text-md-center">正在加载数据...</div>
+                            </td>
+                        </tr>
+                        <tr v-if="isLoaded == true && items.length == 0">
+                            <td colspan="4">
+                                <div class="p-2 text-md-center">暂无数据</div>
+                            </td>
+                        </tr>
+                        <tr v-for="item in items">
+                            <td v-text="item.Code"></td>
+                            <td>
+                                <button class="btn btn-danger btn-sm mr-2" v-on:click="removeItem(item.Code)">删 除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="placeholder"></div>
+
+@section js{
+    <script>
+        $(function () {
+            function getRandomInt(min, max) {
+                min = Math.ceil(min);
+                max = Math.floor(max);
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+
+            let data = {
+                isLoaded: false,
+                items: []
+            };
+            let vm = new Vue({
+                el: "#vue-app",
+                data: data,
+                methods: {
+                    removeItem: function (item) {
+                        DialogHelper.showConfirmDialog(`确认删除'${item}'吗？`, function () {
+                            let formData = new FormData();
+                            formData.append("code", item);
+                            AjaxHelper.postFormData('@Url.Action("Delete")', formData).done(function (postResult) {
+                                if (postResult.Success) {
+                                    data.items.splice(data.items.indexOf(item), 1);
+                                    DialogHelper.showToastSuccess("删除成功");
+                                } else {
+                                    DialogHelper.showErrorDialog(postResult.Message);
+                                }
+                            })
+                        })
+                    }
+                }
+            });
+            // 加载数据
+            $.post('@Url.Action("GetAll")').done(function (result) {
+                if (result.Success) {
+                    data.isLoaded = true;
+                    data.items = result.Context;
+                } else {
+                    DialogHelper.showErrorDialog(result.Message);
+                }
+            });
+            // 弹出新增对话框
+            let placeholder = $("#placeholder");
+            $("#btn-add").click(function () {
+                $.get('@Url.Action("Create")').done(function (html) {
+                    placeholder.html(html);
+                    $("#add_modal").modal("show");
+                    $('#add_modal').on('shown.bs.modal', function () {
+                        $('#Code').focus();
+                    })
+                    let formDom = document.getElementById("form");
+                    $.validator.unobtrusive.parse(formDom);
+                    // 处理表单提交
+                    $(formDom).data("validator").settings.submitHandler = function () {
+                        AjaxHelper.postForm('@Url.Action("Create")', formDom).done(function (result) {
+                            if (result.Success) {
+                                data.items.push(result.Context);
+                                $("#add_modal").modal("hide");
+                                DialogHelper.showToastSuccess("操作成功");
+                            } else {
+                                AjaxHelper.showFormError(formDom, result);
+                            }
+                        })
+                    }
+                });
+                return false;
+            })
+            $(document).on("click", '#random', function () {
+                $('#Code').val(getRandomInt(100000, 999999));
+            })
+            $("#IsEnableInviteCode").click(function (event) {
+                let isChecked = $("#IsEnableInviteCode").prop("checked");
+                let formData = new FormData();
+                formData.append("status", isChecked);
+                AjaxHelper.postFormData('@Url.Action("ChangeCodeRegister")', formData).done(function (result) {
+                    if (result.Success) {
+                        $("#IsEnableInviteCode").prop("checked", isChecked);
+                    } else {
+                        DialogHelper.showErrorDialog(result.Message);
+                    }
+                })
+                return false;
+            })
+        })
+    </script>
+
+
+}

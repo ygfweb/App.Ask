@@ -1,0 +1,12 @@
+﻿.bootstrap-tagsinput {
+    width: 100%;
+    padding: 6px;
+    min-width: 24px;
+    border: 1px solid #ced4da;
+}
+
+.focus {
+    border-color: #0074d9;
+    outline: none;
+    box-shadow: none;
+}

@@ -1,0 +1,77 @@
+﻿.badge {
+    font-size: 80%;
+    border-radius: 0;
+    font-weight: normal;
+    padding: 0.5em 0.8em;
+}
+
+.badge-green {
+    color: #017e66;
+    background-color: #EBF5F3;
+}
+
+a.badge-green:hover, a.badge-green:focus {
+    background-color: #017e66;
+    color: #fff;
+    transition: all .3s;
+}
+
+a.activity-category {
+    top: -2px;
+    height: 16px;
+    line-height: 16px;
+    padding: 0 5px;
+    margin-right: 10px;
+    font-size: 0.95rem;
+    border: 1px solid #4AB563;
+    background: none;
+    color: #4AB563;
+}
+a.activity-category:hover, a.activity-category:focus {
+    background-color: #28A745;
+    color: #fff;
+    transition: all .3s;
+}
+
+a.activity-top {
+    top: -2px;
+    height: 16px;
+    line-height: 16px;
+    padding: 0 5px;
+    margin-right: 10px;
+    font-size: 0.95rem;
+    border: 1px solid #FF9800;
+    background: none;
+    color: #FF9800;
+}
+a.activity-top:hover, a.activity-top:focus {
+    background-color: #FB8C00;
+    color: #fff;
+    transition: all .3s;
+}
+
+a.activity-best {
+    top: -2px;
+    height: 16px;
+    line-height: 16px;
+    padding: 0 5px;
+    margin-right: 10px;
+    font-size: 0.95rem;
+    border: 1px solid #DD5498;
+    background: none;
+    color: #DD5498;
+}
+
+a.activity-best:hover, a.activity-best:focus {
+    background-color: #D63384;
+    color: #fff;
+    transition: all .3s;
+}
+
+a.activity-title {
+    color: #343a40;
+}
+a.activity-title:hover, a.activity-title:focus {
+    color: #0D6EFD;
+    transition: all .3s;
+}

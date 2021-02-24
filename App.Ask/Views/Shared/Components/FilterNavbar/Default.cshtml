@@ -1,0 +1,9 @@
+﻿@model FilterNavbarComponentModel
+<ul class="nav nav-tabs mb-2">
+    @foreach (var item in Model.Data)
+    {
+        <li class="nav-item">
+            <a class="@Model.GetCss(item.Key)" href="@Model.GetUrl(item.Key)">@item.Value</a>
+        </li>
+    }
+</ul>
